@@ -1,6 +1,7 @@
 __author__ = 'ashu'
-import sys
+import os,sys
 import dendropy
+gene_offset=0
 def relabel(tdict,tfilepath):
     toutfilepath=tfilepath.rsplit('.',1)[0]+'_relabeled'+'.'+tfilepath.rsplit('.',1)[1]
     tt=dendropy.Tree.get(
@@ -9,8 +10,16 @@ def relabel(tdict,tfilepath):
     for i in range(0,len(tt.taxon_namespace)):
         tt.taxon_namespace[i].label=tdict[tt.taxon_namespace[i].label]
     tt.write(path=toutfilepath,schema='newick')
+
+def setGeneOffset(gene_dir):
+    flist = os.listdir(gene_dir)
+    flist=filter(lambda x: x.isdigit(),flist)
+    flist = map(lambda x: int(x) , flist)
+    gene_offset = min(flist)-1
+    print "Gene offset set: ", gene_offset
     
-def relabeler_trees(mdir,prefix,t_dict_path,r,g):
+def relabeler_trees(genedir,treefilename,t_dict_path,g):
+    setGeneOffset(genedir)
     mapping={}
     f=open(t_dict_path,'r')
     for line in f:
@@ -18,14 +27,14 @@ def relabeler_trees(mdir,prefix,t_dict_path,r,g):
         value=line.split(' ',1)[1].replace('\n','')
         mapping[key]=value
     f.close()
-    for i in range(1,g+1):
-        relabel(mapping, mdir+'/R'+r+'/'+str(i)+'/'+prefix)
-        print i
+    for i in range(1+gene_offset,g+1+gene_offset):
+        relabel(mapping, genedir+'/'+str(i)+'/'+treefilename)
+        print i," Relabeled"
+
 if __name__ == "__main__":
-    modeldir=sys.argv[1]
-    prefix=sys.argv[2]
+    genedir=sys.argv[1]
+    treefilename=sys.argv[2]
     taxa_dict_path=sys.argv[3]
-    replicate=sys.argv[4]
-    numgenes=int(sys.argv[5])
-    relabeler_trees(modeldir, prefix,taxa_dict_path,replicate, numgenes)    
+    numgenes=int(sys.argv[4])
+    relabeler_trees(genedir, treefilename,taxa_dict_path,numgenes)    
     
