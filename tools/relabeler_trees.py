@@ -1,7 +1,6 @@
 __author__ = 'ashu'
 import os,sys
 import dendropy
-gene_offset=0
 def relabel(tdict,tfilepath):
     toutfilepath=tfilepath.rsplit('.',1)[0]+'_relabeled'+'.'+tfilepath.rsplit('.',1)[1]
     tt=dendropy.Tree.get(
@@ -11,14 +10,14 @@ def relabel(tdict,tfilepath):
         tt.taxon_namespace[i].label=tdict[tt.taxon_namespace[i].label]
     tt.write(path=toutfilepath,schema='newick')
 
-def setGeneOffset(gene_dir, gene_offset):
+def setGeneOffset(gene_dir):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
-    gene_offset = min(flist)-1  
+    return min(flist)-1  
     
 def relabeler_trees(genedir,treefilename,t_dict_path,g):
-    setGeneOffset(genedir, gene_offset)
+    gene_offset = setGeneOffset(genedir)
     print "Gene offset set: ", gene_offset
     mapping={}
     f=open(t_dict_path,'r')
