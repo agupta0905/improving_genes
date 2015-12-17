@@ -5,6 +5,7 @@ import operator
 import math
 import os,subprocess
 from dendropy.calculate import treemeasure
+gene_offset=0
 def read_quartet_dict(dict_path):
     q_dict={}
     f=open(dict_path,'r')
@@ -77,19 +78,27 @@ def get_quartets(treepath,quartet_dict=None,weighting_quarets=False):
                     if(quartet_dict!=None):
                         update(quartet_dict,quartet,weight)
     return local_dict
+def setGeneOffset(gene_dir):
+    flist = os.listdir(gene_dir)
+    flist=filter(lambda x: x.isdigit(),flist)
+    flist = map(lambda x: int(x) , flist)
+    gene_offset = min(flist)-1
+    print "Gene offset set: ", gene_offset
 def extractQuartets(gene_dir,numgenes,input_treefilename,output_quartetfilename,tmp_dir,
                     weighted_quartets=False,binning_dir=None,
                     confidence=None):
+    #Set gene offset
+    setGeneOffset(gene_dir)
     #Select Bins
     bins=[]
     if(binning_dir==None):
         bins.append([])
-        for i in range(1,numgenes+1):
+        for i in range(1+gene_offset,numgenes+1+gene_offset):
             bins[0].append(i)
     else:
         if(not os.path.isfile(binning_dir+'/bin.0.txt')):
             bins.append([])
-            for i in range(1,numgenes+1):
+            for i in range(1+gene_offset,numgenes+1+gene_offset):
                 bins[0].append(i)
         else:
             for i in range(0,numgenes):
@@ -127,7 +136,7 @@ def extractQuartets(gene_dir,numgenes,input_treefilename,output_quartetfilename,
                 write_quartet_dict(all_bin_quartets, gene_dir+'/'+str(i)+'/'+output_quartetfilename)               
 def runwQMC(wqmc_bin_path,gene_dir,numgenes, output_quartetfilename, output_treefilename):
     cmd=wqmc_bin_path
-    for i in range(1,numgenes+1):
+    for i in range(1+gene_offset,numgenes+1+gene_offset):
         print "Running wqmc for gene",i
         input_quartet_filepath='qrtt='+gene_dir+'/'+str(i)+'/'+output_quartetfilename
         output_tree_filepath='otre='+gene_dir+'/'+str(i)+'/'+output_treefilename
