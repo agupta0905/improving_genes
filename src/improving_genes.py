@@ -78,7 +78,7 @@ def get_quartets(treepath,quartet_dict=None,weighting_quarets=False):
                     if(quartet_dict!=None):
                         update(quartet_dict,quartet,weight)
     return local_dict
-def setGeneOffset(gene_dir):
+def setGeneOffset(gene_dir, gene_offset):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
@@ -88,7 +88,7 @@ def extractQuartets(gene_dir,numgenes,input_treefilename,output_quartetfilename,
                     weighted_quartets=False,binning_dir=None,
                     confidence=None):
     #Set gene offset
-    setGeneOffset(gene_dir)
+    setGeneOffset(gene_dir, gene_offset)
     #Select Bins
     bins=[]
     if(binning_dir==None):

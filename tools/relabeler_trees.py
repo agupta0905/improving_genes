@@ -11,7 +11,7 @@ def relabel(tdict,tfilepath):
         tt.taxon_namespace[i].label=tdict[tt.taxon_namespace[i].label]
     tt.write(path=toutfilepath,schema='newick')
 
-def setGeneOffset(gene_dir):
+def setGeneOffset(gene_dir, gene_offset):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
@@ -19,7 +19,7 @@ def setGeneOffset(gene_dir):
     print "Gene offset set: ", gene_offset
     
 def relabeler_trees(genedir,treefilename,t_dict_path,g):
-    setGeneOffset(genedir)
+    setGeneOffset(genedir, gene_offset)
     mapping={}
     f=open(t_dict_path,'r')
     for line in f:
