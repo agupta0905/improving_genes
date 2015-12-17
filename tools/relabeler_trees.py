@@ -15,11 +15,11 @@ def setGeneOffset(gene_dir, gene_offset):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
-    gene_offset = min(flist)-1
-    print "Gene offset set: ", gene_offset
+    gene_offset = min(flist)-1  
     
 def relabeler_trees(genedir,treefilename,t_dict_path,g):
     setGeneOffset(genedir, gene_offset)
+    print "Gene offset set: ", gene_offset
     mapping={}
     f=open(t_dict_path,'r')
     for line in f:

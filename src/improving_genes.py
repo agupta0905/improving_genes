@@ -83,12 +83,12 @@ def setGeneOffset(gene_dir, gene_offset):
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
     gene_offset = min(flist)-1
-    print "Gene offset set: ", gene_offset
 def extractQuartets(gene_dir,numgenes,input_treefilename,output_quartetfilename,tmp_dir,
                     weighted_quartets=False,binning_dir=None,
                     confidence=None):
     #Set gene offset
     setGeneOffset(gene_dir, gene_offset)
+    print "Gene offset set: ", gene_offset
     #Select Bins
     bins=[]
     if(binning_dir==None):
