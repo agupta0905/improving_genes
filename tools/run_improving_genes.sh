@@ -52,9 +52,10 @@ else
 	ARGUMENTS="${ARGUMENTS/^/$QUARTET_FILENAME}"
 	echo "ARGUMENTS: "$ARGUMENTS
 	#Create tmp directory 
-	#mkdir -p $TMP_DIRPATH
+	mkdir -p $TMP_DIRPATH
 	#Launch Python 
-	#python $SRC_FILE $ARGUMENTS
+	python $SRC_FILE $ARGUMENTS
+	echo "[STATUS]: GENE TREES IMPROVED"
 	#Get gene offset
 	re='^[0-9]+$'
 	for entry in "$GENE_DIR"/*
@@ -79,7 +80,10 @@ else
 			echo "WQMC failed for $i"
    			cp $GENE_DIR"/"$i"/"$TREEFILENAME $GENE_DIR"/"$i"/"$WQMC_FILENAME
 		fi
+		echo "WQMC run for gene "$i
 	done
+	echo "[STATUS]: WQMC RUN COMPLETED"
 	#Get Results
-	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES $RESULT_FILENAME 
+	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES $RESULT_FILENAME
+	echo "[STATUS]: Got results for all genes" 
 fi
