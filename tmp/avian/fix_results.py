@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append('/u/sciteam/gupta1/improving_genes/tools')
-import get_results.get_results
+from get_results import get_results
 numreplicates=10
 numgenes=1000
 dataset_dir='/u/sciteam/gupta1/scratch/avian_dataset'
