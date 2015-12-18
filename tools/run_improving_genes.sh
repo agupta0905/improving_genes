@@ -1,5 +1,5 @@
 #!/bin/bash
-SRC_FILE=~/improving_genes/improving_genes.py
+SRC_FILE=~/improving_genes/src/improving_genes.py
 WQMC_BIN=~/improving_genes/tools/max-cut-tree
 GENE_OFFSET=100000000
 RES_SRC_FILE=~/improving_genes/tools/get_results.py
