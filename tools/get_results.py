@@ -16,9 +16,9 @@ def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,o
         tns = dendropy.TaxonNamespace()
         reftreepath=rgenedir+'/'+str(i)+'/'+reftreefilename
         outtreepath=ogenedir+'/'+str(i)+'/'+outputtreefilename
-        rtree = dendropy.Tree.get(path=reftreepath,"newick",
+        rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
         taxon_namespace=tns)
-        otree = dendropy.Tree.get(path=outtreepath,"newick",
+        otree = dendropy.Tree.get(path=outtreepath,schema='newick',
         taxon_namespace=tns)
         rtree.encode_bipartitions()
         otree.encode_bipartitions()
