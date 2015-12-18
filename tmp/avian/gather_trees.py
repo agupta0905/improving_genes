@@ -13,7 +13,7 @@ for i in range(1,numreplicates+1):
     for midx in range(0,len(models)):
         gene_dir=dataset_dir+'/'+models[midx]+'/R'+str(i)
         gene_offset=setGeneOffset(gene_dir)
-        print "Gene offset set for genedir",gene_dir
+        print "Gene offset set for genedir",gene_dir, 'to', gene_offset
         for p in parameters:
             f=open(gene_dir+'/all_wqmc_'+p+'.trees','w')
             for g in range(1+gene_offset,gene_offset+1+numgenes):
