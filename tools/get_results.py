@@ -13,18 +13,21 @@ def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,o
     print "Gene offset: ",gene_offset
     res=[]
     for i in range(1+gene_offset,gene_offset+numgenes+1):
-        tns = dendropy.TaxonNamespace()
-        reftreepath=rgenedir+'/'+str(i)+'/'+reftreefilename
-        outtreepath=ogenedir+'/'+str(i)+'/'+outputtreefilename
-        rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
-        taxon_namespace=tns)
-        otree = dendropy.Tree.get(path=outtreepath,schema='newick',
-        taxon_namespace=tns)
-        rtree.encode_bipartitions()
-        otree.encode_bipartitions()
-        fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
-        res.append(fn_rate)
-        print "Result for",i,"Done"
+        try:
+            tns = dendropy.TaxonNamespace()
+            reftreepath=rgenedir+'/'+str(i)+'/'+reftreefilename
+            outtreepath=ogenedir+'/'+str(i)+'/'+outputtreefilename
+            rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
+            taxon_namespace=tns)
+            otree = dendropy.Tree.get(path=outtreepath,schema='newick',
+            taxon_namespace=tns)
+            rtree.encode_bipartitions()
+            otree.encode_bipartitions()
+            fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
+            res.append(fn_rate)
+            print "Result for",i,"Done"
+        except:
+            print '[ERROR][get_results.py] Unable to get result for',reftreepath,outtreepath
     res_mean,res_median=mean(res),median(res)
     f=open(ogenedir+'/'+outputfilename,'w')
     f.write(str(res_mean)+','+str(res_median)+'\n')
