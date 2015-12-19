@@ -11,7 +11,7 @@ parameters=['astral_all_unimproved.trees',
 numreplicates=10
 for r in range(1,numreplicates+1):
     for m in models:
-        modeldir=dataset_dir+'/'+m+'/R'+r
+        modeldir=dataset_dir+'/'+m+'/R'+str(r)
         for p in parameters:
             outtreepath=modeldir+'/'+p
             fn_rate=get_fnrate(true_species_treepath, outtreepath)
