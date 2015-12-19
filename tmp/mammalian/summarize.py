@@ -2,9 +2,8 @@ import numpy,os,re
 dataset_dir='/u/sciteam/gupta1/scratch/mammalian_dataset'
 models=['0.5X-200-500','1X-200-500', '1X-200-1000', '2X-200-500']
 num_replicates=10
-re.compile('result_*')
 def regex_filter(x):
-    if re.match(x):
+    if re.match('result_*',x):
         return True
     else:
         return False
