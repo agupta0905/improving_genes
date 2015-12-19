@@ -8,22 +8,25 @@ def setGeneOffset(gene_dir):
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
     return min(flist)-1  
+def get_fnrate(reftreepath,outtreepath):
+    tns = dendropy.TaxonNamespace()
+    rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
+    taxon_namespace=tns)
+    otree = dendropy.Tree.get(path=outtreepath,schema='newick',
+    taxon_namespace=tns)
+    rtree.encode_bipartitions()
+    otree.encode_bipartitions()
+    fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
+    return fn_rate
 def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,outputfilename):
     gene_offset=setGeneOffset(rgenedir)
     print "Gene offset: ",gene_offset
     res=[]
     for i in range(1+gene_offset,gene_offset+numgenes+1):
         try:
-            tns = dendropy.TaxonNamespace()
             reftreepath=rgenedir+'/'+str(i)+'/'+reftreefilename
             outtreepath=ogenedir+'/'+str(i)+'/'+outputtreefilename
-            rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
-            taxon_namespace=tns)
-            otree = dendropy.Tree.get(path=outtreepath,schema='newick',
-            taxon_namespace=tns)
-            rtree.encode_bipartitions()
-            otree.encode_bipartitions()
-            fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
+            fn_rate=get_fnrate(reftreepath, outtreepath)
             res.append(fn_rate)
             print "Result for",i,"Done"
         except:
