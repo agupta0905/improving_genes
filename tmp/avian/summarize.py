@@ -25,3 +25,4 @@ for m in models:
         f.write(str(numpy.mean(mean_results))+','+str(numpy.median(median_results))+'\n')
         f.close()
         print 'Model',m,'Parameter',p,'Done'
+        print mean_results
