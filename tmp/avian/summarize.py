@@ -9,11 +9,12 @@ def regex_filter(x):
         return False
 for m in models:
     mdir=dataset_dir+'/'+m
-    mean_results=[]
-    median_results=[]
+    
     flist=os.listdir(mdir+'/R'+str(1))
     flist=filter(regex_filter,flist)
     for p in flist:
+        mean_results=[]
+        median_results=[]
         f=open(mdir+'/'+p,'w')
         for r in range(1,num_replicates+1):
             fin=open(mdir+'/R'+str(r)+'/'+p,'r')
