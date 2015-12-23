@@ -16,6 +16,8 @@ def get_fnrate(reftreepath,outtreepath):
     taxon_namespace=tns)
     rtree.encode_bipartitions()
     otree.encode_bipartitions()
+    print rtree.as_string(schema="newick"), "Rtree"
+    print otree.as_string(schema="newick"), "Otree"
     fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
     return fn_rate
 def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,outputfilename):

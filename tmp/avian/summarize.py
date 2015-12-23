@@ -9,7 +9,6 @@ def regex_filter(x):
         return False
 for m in models:
     mdir=dataset_dir+'/'+m
-    
     flist=os.listdir(mdir+'/R'+str(1))
     flist=filter(regex_filter,flist)
     for p in flist:
