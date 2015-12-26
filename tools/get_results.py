@@ -14,12 +14,12 @@ def get_fnrate(reftreepath,outtreepath):
     taxon_namespace=tns)
     otree = dendropy.Tree.get(path=outtreepath,schema='newick',
     taxon_namespace=tns)
-    rtree.encode_bipartitions()
-    otree.encode_bipartitions()
     print "RTREE"
     rtree.print_plot()
     print "OTREE"
     otree.print_plot()
+    rtree.encode_bipartitions()
+    otree.encode_bipartitions()
     #print rtree.as_string(schema="newick"), "Rtree"
     #print otree.as_string(schema="newick"), "Otree"
     fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
