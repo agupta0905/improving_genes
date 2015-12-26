@@ -8,6 +8,31 @@ def setGeneOffset(gene_dir):
     flist=filter(lambda x: x.isdigit(),flist)
     flist = map(lambda x: int(x) , flist)
     return min(flist)-1  
+def decode_bipartition(bp,tlist):
+    res=''
+    one_set=set()
+    zero_set=set()
+    for i in range(0,len(bp)):
+        if bp[i]=='1':
+            one_set.add(tlist[i])
+        else:
+            zero_set.add(tlist[i])
+    for m in one_set:
+        res+=(m+' ')
+    res+='|'
+    for m in zero_set:
+        res+=(m+' ')
+    return res
+
+def get_bipartitions(tree):
+    tns=tree.taxon_namespace
+    bset=set()
+    for n in tree.preorder_node_iter():
+        if (n.is_internal() and (n.parent_node!=None)):
+            bipartition=str(n.edge.bipartition)
+            bset.add(decode_bipartition(bipartition,tns.labels()))
+    return bset
+             
 def get_fnrate(reftreepath,outtreepath):
     tns = dendropy.TaxonNamespace()
     rtree = dendropy.Tree.get(path=reftreepath,schema='newick',
@@ -20,6 +45,8 @@ def get_fnrate(reftreepath,outtreepath):
     otree.print_plot()
     rtree.encode_bipartitions()
     otree.encode_bipartitions()
+    print get_bipartitions(rtree),"RTREE"
+    print get_bipartitions(otree),"OTREE"
     #print rtree.as_string(schema="newick"), "Rtree"
     #print otree.as_string(schema="newick"), "Otree"
     fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
