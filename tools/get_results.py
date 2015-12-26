@@ -10,13 +10,14 @@ def setGeneOffset(gene_dir):
     return min(flist)-1  
 def decode_bipartition(bp,tlist):
     res=''
+    num_taxa=len(tlist)
     one_set=set()
     zero_set=set()
     for i in range(0,len(bp)):
         if bp[i]=='1':
-            one_set.add(tlist[i])
+            one_set.add(tlist[num_taxa-i-1])
         else:
-            zero_set.add(tlist[i])
+            zero_set.add(tlist[num_taxa-i-1])
     for m in one_set:
         res+=(m+' ')
     res+='|'
