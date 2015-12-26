@@ -40,19 +40,11 @@ def get_fnrate(reftreepath,outtreepath):
     taxon_namespace=tns)
     otree = dendropy.Tree.get(path=outtreepath,schema='newick',
     taxon_namespace=tns)
-    print "RTREE"
-    rtree.print_plot()
-    print "OTREE"
-    otree.print_plot()
     rtree.encode_bipartitions()
     otree.encode_bipartitions()
-    print get_bipartitions(rtree),"RTREE"
-    print get_bipartitions(otree),"OTREE"
-    #print rtree.as_string(schema="newick"), "Rtree"
-    #print otree.as_string(schema="newick"), "Otree"
     fn_rate=treecompare.false_positives_and_negatives(rtree, otree)[1]/float(len(tns)-3)
-    print fn_rate,"FNRATE"
     return fn_rate
+
 def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,outputfilename):
     gene_offset=setGeneOffset(rgenedir)
     print "Gene offset: ",gene_offset
