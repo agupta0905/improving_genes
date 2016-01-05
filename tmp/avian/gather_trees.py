@@ -3,7 +3,7 @@ numreplicates=10
 numgenes=1000
 dataset_dir='/u/sciteam/gupta1/scratch/avian_dataset'
 models=['0.5X-1000-500','1X-1000-250', '1X-1000-500', '2X-1000-500']
-parameters=['nobinning_withbranches_noupweight','nobinning_withbranches_withupweight0.1','nobinning_withbranches_withupweight0.2']
+parameters=['withbinning50_withbranches_noupweight','withbinning50_withbranches_withupweight0.1','withbinning50_withbranches_withupweight0.2']
 def setGeneOffset(gene_dir):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)

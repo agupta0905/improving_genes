@@ -3,7 +3,7 @@ numreplicates=10
 numgenes=200
 dataset_dir='/u/sciteam/gupta1/scratch/mammalian_dataset'
 models=['0.5X-200-500','1X-200-500', '1X-200-1000', '2X-200-500']
-parameters=['nobinning_withbranches_noupweight','nobinning_withbranches_withupweight0.1','nobinning_withbranches_withupweight0.2']
+parameters=['withbinning75_withbranches_noupweight','withbinning75_withbranches_withupweight0.1','withbinning75_withbranches_withupweight0.2']
 def setGeneOffset(gene_dir):
     flist = os.listdir(gene_dir)
     flist=filter(lambda x: x.isdigit(),flist)

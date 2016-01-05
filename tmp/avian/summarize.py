@@ -3,7 +3,7 @@ dataset_dir='/u/sciteam/gupta1/scratch/avian_dataset'
 models=['0.5X-1000-500','1X-1000-250', '1X-1000-500', '2X-1000-500']
 num_replicates=10
 def regex_filter(x):
-    if re.match('result_*',x):
+    if re.match('result_*',x) and ('withbinning' in x or 'unimproved' in x):
         return True
     else:
         return False

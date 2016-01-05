@@ -2,10 +2,10 @@ import sys
 sys.path.append('/u/sciteam/gupta1/improving_genes/tools')
 from get_results import get_fnrate
 dataset_dir='/u/sciteam/gupta1/scratch/11_taxon_dataset'
-models=['model.10.1800000.0.000000111', 
-        'model.10.200000.0.000001000',
-        'model.10.5400000.0.000000037',
-        'model.10.600000.0.000000333']
+models=['model.10.1800000.0.000000111']#, 
+       # 'model.10.200000.0.000001000',
+       # 'model.10.5400000.0.000000037',
+       # 'model.10.600000.0.000000333']
 parameters=['astral_all_unimproved.trees',
             'astral_all_wqmc_nobinning_withbranches_noupweight.trees',
              'astral_all_wqmc_nobinning_withbranches_withupweight0.1.trees',

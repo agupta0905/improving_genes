@@ -5,9 +5,9 @@ dataset_dir='/u/sciteam/gupta1/scratch/mammalian_dataset'
 true_species_treepath='/u/sciteam/gupta1/scratch/mammalian_dataset/species_relabeled.tree'
 models=['0.5X-200-500','1X-200-500', '1X-200-1000', '2X-200-500']
 parameters=['astral_all_unimproved.trees',
-            'astral_all_wqmc_nobinning_withbranches_noupweight.trees',
-             'astral_all_wqmc_nobinning_withbranches_withupweight0.1.trees',
-              'astral_all_wqmc_nobinning_withbranches_withupweight0.2.trees']
+            'astral_all_wqmc_withbinning75_withbranches_noupweight.trees',
+             'astral_all_wqmc_withbinning75_withbranches_withupweight0.1.trees',
+              'astral_all_wqmc_withbinning75_withbranches_withupweight0.2.trees']
 numreplicates=10
 for r in range(1,numreplicates+1):
     for m in models:
