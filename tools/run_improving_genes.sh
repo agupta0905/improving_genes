@@ -20,7 +20,7 @@ else
 	TRUE_GENEDIR=$7
 	TRUETREEFILENAME=$8
 	BSREPSFILENAME=$(echo $9 | cut -f2 -d=)
-	IDENTIFIER=$(echo $10 | cut -f2 -d=)
+	IDENTIFIER=$(echo ${10} | cut -f2 -d=)
 	ARGUMENTS="$1 $2 $3 ^ @"
 	TMP_DIRNAME="tmp_G"$NUMGENES
 	if [ $BINNING_T == "off" ]
