@@ -34,7 +34,7 @@ else
 			PP=$PYTHONPATH
 			PP="${PP/4.0.3/3.12.0}"
 			export PYTHONPATH=$PP
-   			$STATISTICAL_BINNING_SCRIPT $GENE_DIR $NUMGENES $BINNING_T $TREEFILENAME
+   			$STATISTICAL_BINNING_SCRIPT $GENE_DIR $NUMGENES $BINNING_T $TREEFILENAME $TMP_DIRNAME
    			PP="${PP/3.12.0/4.0.3}"
 			export PYTHONPATH=$PP
 		fi
@@ -71,35 +71,6 @@ else
 	#Launch Python 
 	python $SRC_FILE $ARGUMENTS
 	echo "[STATUS]: GENE TREES IMPROVED"
-############################################################################################################
-	#Get gene offset
-	re='^[0-9]+$'
-	for entry in "$GENE_DIR"/*
-	do
-		gene=$(echo $entry | rev | cut -f1 -d/ | rev)
-  		if ! [[ $gene =~ $re ]] ; then
- 			:
- 		else
- 			GENE_OFFSET=$( (( $GENE_OFFSET <= $gene )) && echo "$GENE_OFFSET" || echo "$gene" )
-		fi
-	done
-	GENE_OFFSET=`expr $GENE_OFFSET - 1`
-	#Run WQMC
-	GENE_BEGIN=`expr $GENE_OFFSET + 1`
-	GENE_END=`expr $GENE_OFFSET + $NUMGENES`
-	for i in $(seq $GENE_BEGIN $GENE_END)
-	do
-		$WQMC_BIN "qrtt="$GENE_DIR"/"$i"/"$QUARTET_FILENAME weights=on "otre="$GENE_DIR"/"$i"/"$WQMC_FILENAME
-		FILE=$GENE_DIR"/"$i"/"$WQMC_FILENAME
-		if ! [ -f $FILE ];
-		then
-			echo "WQMC failed for $i"
-   			cp $GENE_DIR"/"$i"/"$TREEFILENAME $GENE_DIR"/"$i"/"$WQMC_FILENAME
-		fi
-		echo "WQMC run for gene "$i
-	done
-	echo "[STATUS]: WQMC RUN COMPLETED"
-	#Get Results
-	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES $RESULT_FILENAME
-	echo "[STATUS]: Got results for all genes" 
+	rm -rf tmp_*
+	###################################
 fi
