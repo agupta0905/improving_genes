@@ -7,9 +7,9 @@ ASTRID_BIN=/u/sciteam/gupta1/phylogenetics/ASTRID/ASTRID
 STATISTICAL_BINNING_SCRIPT=~/improving_genes/tools/run_statistical_binning.sh
 GENE_OFFSET=100000000
 RES_SRC_FILE=~/improving_genes/tools/get_results.py
-if [ $# -lt 9 ]
+if [ $# -lt 10 ]
 then
-	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off]"
+	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off] identifier=[value]"
 else
 	GENE_DIR=$1
 	NUMGENES=$2
@@ -20,6 +20,7 @@ else
 	TRUE_GENEDIR=$7
 	TRUETREEFILENAME=$8
 	BSREPSFILENAME=$(echo $9 | cut -f2 -d=)
+	IDENTIFIER=$(echo $10 | cut -f2 -d=)
 	ARGUMENTS="$1 $2 $3 ^ @"
 	TMP_DIRNAME="tmp_G"$NUMGENES
 	if [ $BINNING_T == "off" ]
@@ -58,7 +59,7 @@ else
 	
 	TMP_DIRPATH=$GENE_DIR"/"$TMP_DIRNAME
 	ARGUMENTS="${ARGUMENTS/@/$TMP_DIRPATH}"
-	OUTPUT_PREFIX=quartet
+	OUTPUT_PREFIX="quartet_"$IDENTIFIER
 	WQMC_PREFIX=wqmc
 	RESULT_PREFIX=result
 	QUARTET_FILENAME="${TMP_DIRNAME/tmp/$OUTPUT_PREFIX}".txt
