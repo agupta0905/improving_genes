@@ -35,6 +35,7 @@ else
 			PP="${PP/4.0.3/3.12.0}"
 			export PYTHONPATH=$PP
    			$STATISTICAL_BINNING_SCRIPT $GENE_DIR $NUMGENES $BINNING_T $TREEFILENAME $TMP_DIRNAME
+   			rm -rf $GENE_DIR"/"$TMP_DIRNAME
    			PP="${PP/3.12.0/4.0.3}"
 			export PYTHONPATH=$PP
 		fi
@@ -71,6 +72,6 @@ else
 	#Launch Python 
 	python $SRC_FILE $ARGUMENTS
 	echo "[STATUS]: GENE TREES IMPROVED"
-	rm -rf tmp_*
+	rm -rf $TMP_DIRPATH
 	###################################
 fi
