@@ -12,6 +12,7 @@ else
 	PAIRWISEDIR=$GENE_DIR"/BINS_"$NUMGENES"_"$SUPPORT_THRESHOLD
 	mkdir -p $PAIRWISEDIR
 	mkdir -p $TMPDIR
+	OLD_DIR=`pwd`
 	cd $TMPDIR
 	$BINNING_HOME/makecommands.compatibility.sh $GENE_DIR $SUPPORT_THRESHOLD $PAIRWISEDIR $TREEFILENAME $NUMGENES
 	COMMAND_FILE=commands.compat.$NUMGENES.$SUPPORT_THRESHOLD
@@ -20,4 +21,5 @@ else
 	cd $PAIRWISEDIR
 	ls | grep "[0-9]*\.$SUPPORT_THRESHOLD" | cut -d. -f 1 > genes
 	python $BINNING_HOME/cluster_genetrees.py genes $SUPPORT_THRESHOLD
+	cd $OLD_DIR
 fi
