@@ -1,9 +1,9 @@
 import numpy,os,re
 dataset_dir='/u/sciteam/gupta1/scratch/11_taxon_dataset'
-models=['model.10.1800000.0.000000111']#, 
-        #'model.10.200000.0.000001000',
-        #'model.10.5400000.0.000000037',
-        #'model.10.600000.0.000000333']
+models=['model.10.1800000.0.000000111', 
+        'model.10.200000.0.000001000',
+        'model.10.5400000.0.000000037',
+        'model.10.600000.0.000000333']
 num_replicates=10
 def regex_filter(x):
     if re.match('result_*',x):

@@ -1,9 +1,6 @@
 import os,re
-dataset_dir='/u/sciteam/gupta1/scratch/11_taxon_dataset'
-models=['model.10.1800000.0.000000111', 
-        'model.10.200000.0.000001000',
-        'model.10.5400000.0.000000037',
-        'model.10.600000.0.000000333']
+dataset_dir='/u/sciteam/gupta1/scratch/astra2_dataset'
+models = ['model.200.10000000.0.0000001','model.200.2000000.0.0000001','model.200.500000.0.0000001']
 order=['noupweight','0.1','0.2','unimproved']
 def regex_filter(x):
     if re.match('result_*',x):
@@ -27,7 +24,7 @@ for m in models:
             species_list.append(element)
         else:
             gene_list.append(element)
-    fout=open(mdir+'/all_results_50genes.csv','w')
+    fout=open(mdir+'/all_results_50sites.csv','w')
     for od in order:
         gene=None
         for  g in gene_list:

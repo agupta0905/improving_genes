@@ -3,7 +3,7 @@ dataset_dir='/u/sciteam/gupta1/scratch/mammalian_dataset'
 models=['0.5X-200-500','1X-200-500', '1X-200-1000', '2X-200-500']
 num_replicates=10
 def regex_filter(x):
-    if re.match('result_*',x) and ('withbinning' in x or 'unimproved' in x):
+    if re.match('result_*',x) and ('nobinning' in x or 'unimproved' in x):
         return True
     else:
         return False

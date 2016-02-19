@@ -3,7 +3,7 @@ dataset_dir='/u/sciteam/gupta1/scratch/avian_dataset'
 models=['0.5X-1000-500','1X-1000-250', '1X-1000-500', '2X-1000-500']
 order=['noupweight','0.1','0.2','unimproved']
 def regex_filter(x):
-    if re.match('result_*',x) and ('withbinning' in x or 'unimproved' in x):
+    if re.match('result_*',x) and ('nobinning' in x or 'unimproved' in x):
         return True
     else:
         return False
@@ -25,7 +25,7 @@ for m in models:
             species_list.append(element)
         else:
             gene_list.append(element)
-    fout=open(mdir+'/all_results_binning.csv','w')
+    fout=open(mdir+'/all_results_50genes.csv','w')
     for od in order:
         gene=None
         for  g in gene_list:

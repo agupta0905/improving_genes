@@ -1,11 +1,11 @@
 import os
 numreplicates=10
-numgenes=1000
+numgenes=50
 dataset_dir='/u/sciteam/gupta1/scratch/11_taxon_dataset'
-models=['model.10.1800000.0.000000111']#, 
-        #'model.10.200000.0.000001000',
-        #'model.10.5400000.0.000000037',
-        #'model.10.600000.0.000000333']
+models=['model.10.1800000.0.000000111', 
+        'model.10.200000.0.000001000',
+        'model.10.5400000.0.000000037',
+        'model.10.600000.0.000000333']
 parameters=['nobinning_withbranches_noupweight','nobinning_withbranches_withupweight0.1','nobinning_withbranches_withupweight0.2']
 def setGeneOffset(gene_dir):
     flist = os.listdir(gene_dir)
@@ -32,7 +32,7 @@ for i in range(1,numreplicates+1):
         #For unimproved
         f=open(gene_dir+'/all_unimproved'+'.trees','w')
         for g in range(1+gene_offset,gene_offset+1+numgenes):
-            fipath=gene_dir+'/'+str(g)+'/fasttree_genetree_relabeled_50l.tree'
+            fipath=gene_dir+'/'+str(g)+'/fasttree_genetree_relabeled.tree'
             try:
                 fi=open(fipath,'r')
                 for line in fi:
