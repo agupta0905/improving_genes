@@ -7,9 +7,9 @@ ASTRID_BIN=/u/sciteam/gupta1/phylogenetics/ASTRID/ASTRID
 STATISTICAL_BINNING_SCRIPT=~/improving_genes/tools/run_statistical_binning.sh
 GENE_OFFSET=100000000
 RES_SRC_FILE=~/improving_genes/tools/get_results.py
-if [ $# -lt 10 ]
+if [ $# -lt 11 ]
 then
-	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off] identifier=[value]"
+	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off] identifier=[value] supertree=[wqmc,pv]"
 else
 	GENE_DIR=$1
 	NUMGENES=$2
@@ -21,6 +21,7 @@ else
 	TRUETREEFILENAME=$8
 	BSREPSFILENAME=$(echo $9 | cut -f2 -d=)
 	IDENTIFIER=$(echo ${10} | cut -f2 -d=)
+	SUPERTREE_METHOD=$(echo ${11} | cut -f2 -d=)
 	ARGUMENTS="$1 $2 $3 ^ @"
 	TMP_DIRNAME="tmp_G"$NUMGENES
 	if [ $BINNING_T == "off" ]
@@ -60,12 +61,7 @@ else
 	TMP_DIRPATH=$GENE_DIR"/"$TMP_DIRNAME
 	ARGUMENTS="${ARGUMENTS/@/$TMP_DIRPATH}"
 	OUTPUT_PREFIX="quartet_"$IDENTIFIER
-	WQMC_PREFIX=wqmc
-	RESULT_PREFIX=result
 	QUARTET_FILENAME="${TMP_DIRNAME/tmp/$OUTPUT_PREFIX}".txt
-	WQMC_FILENAME="${TMP_DIRNAME/tmp/$WQMC_PREFIX}".tree
-	RESULT_FILENAME="${TMP_DIRNAME/tmp/$RESULT_PREFIX}".txt
-	
 	ARGUMENTS="${ARGUMENTS/^/$QUARTET_FILENAME}"
 	echo "ARGUMENTS: "$ARGUMENTS
 	#Create tmp directory 
@@ -74,5 +70,39 @@ else
 	python $SRC_FILE $ARGUMENTS
 	echo "[STATUS]: GENE TREES IMPROVED"
 	rm -rf $TMP_DIRPATH
-	###################################
+############################################################################################################################################
+	#Get gene offset
+	re='^[0-9]+$'
+	for entry in "$GENE_DIR"/*
+	do
+		gene=$(echo $entry | rev | cut -f1 -d/ | rev)
+  		if ! [[ $gene =~ $re ]] ; then
+ 			:
+ 		else
+ 			GENE_OFFSET=$( (( $GENE_OFFSET <= $gene )) && echo "$GENE_OFFSET" || echo "$gene" )
+		fi
+	done
+	GENE_OFFSET=`expr $GENE_OFFSET - 1`
+	GENE_BEGIN=`expr $GENE_OFFSET + 1`
+	GENE_END=`expr $GENE_OFFSET + $NUMGENES`
+############################################################################################################################################	
+	if [ $SUPERTREE_METHOD == "wqmc" ]
+	then
+		WQMC_PREFIX="wqmc_"$IDENTIFIER
+		WQMC_FILENAME="${TMP_DIRNAME/tmp/$WQMC_PREFIX}".tree
+		for i in $(seq $GENE_BEGIN $GENE_END)
+		do
+			$WQMC_BIN "qrtt="$GENE_DIR"/"$i"/"$QUARTET_FILENAME weights=on "otre="$GENE_DIR"/"$i"/"$WQMC_FILENAME
+			FILE=$GENE_DIR"/"$i"/"$WQMC_FILENAME
+			if ! [ -f $FILE ];
+			then
+				echo "WQMC failed for $i"
+   				cp $GENE_DIR"/"$i"/"$TREEFILENAME $GENE_DIR"/"$i"/"$WQMC_FILENAME
+			fi
+			echo "WQMC run for gene "$i
+		done
+		echo "[STATUS]: WQMC RUN COMPLETED"
+	else
+		echo "TO DO"
+	fi
 fi
