@@ -103,6 +103,20 @@ else
 		done
 		echo "[STATUS]: WQMC RUN COMPLETED"
 	else
-		echo "TO DO"
+		PV_PREFIX="pv_"$IDENTIFIER
+		PV_FILENAME="${TMP_DIRNAME/tmp/$PV_PREFIX}".tree
+		ORIG_GENES_FILE=$GENE_DIR"/G_"$NUMGENES"_genes.trees" 
+		if ! [ -f $ORIG_GENES ];
+		then
+			for i in $(seq $GENE_BEGIN $GENE_END)
+			do
+				cat $GENE_DIR"/"$i"/"$TREEFILENAME >> $ORIG_GENES_FILE
+			done
+		fi
+		for i in $(seq $GENE_BEGIN $GENE_END)
+		do
+			$P_DP_BIN -c DP -g $ORIG_GENES_FILE -q $GENE_DIR"/"$i"/"$QUARTET_FILENAME -a $ASTRAL_JAR -o $GENE_DIR"/"$i"/"$PV_FILENAME --maximize
+		done
+		
 	fi
 fi
