@@ -7,9 +7,9 @@ ASTRID_BIN=/u/sciteam/gupta1/phylogenetics/ASTRID/ASTRID
 STATISTICAL_BINNING_SCRIPT=~/improving_genes/tools/run_statistical_binning.sh
 GENE_OFFSET=100000000
 RES_SRC_FILE=~/improving_genes/tools/get_results.py
-if [ $# -lt 11 ]
+if [ $# -lt 12 ]
 then
-	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off] identifier=[value] supertree=[wqmc,pv]"
+	echo "Usage run_improving_genes.sh gene_dir numgenes treefilename weights=[on,off] confidence=[off,value] binning=[off,threshold] true_gene_dir truetreefilename bsrepsfilename=[fname,off] identifier=[value] supertree=[wqmc,pv] truespeciestreepath"
 else
 	GENE_DIR=$1
 	NUMGENES=$2
@@ -22,6 +22,7 @@ else
 	BSREPSFILENAME=$(echo $9 | cut -f2 -d=)
 	IDENTIFIER=$(echo ${10} | cut -f2 -d=)
 	SUPERTREE_METHOD=$(echo ${11} | cut -f2 -d=)
+	TRUESPECIESTREEPATH=${12}
 	ARGUMENTS="$1 $2 $3 ^ @"
 	TMP_DIRNAME="tmp_G"$NUMGENES
 	if [ $BINNING_T == "off" ]
@@ -86,6 +87,19 @@ else
 	GENE_BEGIN=`expr $GENE_OFFSET + 1`
 	GENE_END=`expr $GENE_OFFSET + $NUMGENES`
 ############################################################################################################################################	
+	ORIG_GENES_FILE=$GENE_DIR"/G_"$NUMGENES"_genes.trees" 
+	SETX_FILE=$GENE_DIR"/setX_G"$NUMGENES".tree"
+	if ! [ -f $SETX_FILE ];
+	then
+		rm -f $ORIG_GENES_FILE
+		for i in $(seq $GENE_BEGIN $GENE_END)
+		do
+			cat $GENE_DIR"/"$i"/"$TREEFILENAME >> $ORIG_GENES_FILE
+		done
+		$ASTRID_BIN -i $ORIG_GENES_FILE -o $GENE_DIR"/astrid_G"$NUMGENES".tree"
+		java -jar $ASTRAL_JAR -i $ORIG_GENES_FILE -o $GENE_DIR"/astral_G"$NUMGENES".tree"
+		cat $ORIG_GENES_FILE $GENE_DIR"/astrid_G"$NUMGENES".tree" $GENE_DIR"/astral_G"$NUMGENES".tree" > $SETX_FILE
+	fi
 	if [ $SUPERTREE_METHOD == "wqmc" ]
 	then
 		WQMC_PREFIX="wqmc_"$IDENTIFIER
@@ -105,23 +119,71 @@ else
 	else
 		PV_PREFIX="pv_"$IDENTIFIER
 		PV_FILENAME="${TMP_DIRNAME/tmp/$PV_PREFIX}".tree
-		ORIG_GENES_FILE=$GENE_DIR"/G_"$NUMGENES"_genes.trees" 
-		if ! [ -f $ORIG_GENES_FILE ];
-		then
-			for i in $(seq $GENE_BEGIN $GENE_END)
-			do
-				cat $GENE_DIR"/"$i"/"$TREEFILENAME >> $ORIG_GENES_FILE
-			done
-		fi
-		$ASTRID_BIN -i $ORIG_GENES_FILE -o $GENE_DIR"/astrid_G"$NUMGENES".tree"
-		java -jar $ASTRAL_JAR -i $ORIG_GENES_FILE -o $GENE_DIR"/astral_G"$NUMGENES".tree"
-		SETX_FILE=$GENE_DIR"/setX_G"$NUMGENES".tree"
-		cat $ORIG_GENES_FILE $GENE_DIR"/astrid_G"$NUMGENES".tree" $GENE_DIR"/astral_G"$NUMGENES".tree" > $SETX_FILE
-		
 		for i in $(seq $GENE_BEGIN $GENE_END)
 		do
 			$P_DP_BIN -c DP -g $SETX_FILE -q $GENE_DIR"/"$i"/"$QUARTET_FILENAME -a $ASTRAL_JAR -o $GENE_DIR"/"$i"/"$PV_FILENAME -v info --maximize
 			echo $i" done for PV"
 		done
 	fi
+############################################################################################################################################	
+	if [ $SUPERTREE_METHOD == "wqmc" ]
+	then
+		NEWGENE_TREES_PREFIX="wqmc_"$IDENTIFIER
+		NEWGENE_TREES_FILENAME="${TMP_DIRNAME/tmp/$NEWGENE_TREES_PREFIX}".trees
+		NEWGENE_ASTRID_PREFIX="astrid_"$IDENTIFIER
+		NEWGENE_ASTRID_FILENAME="${TMP_DIRNAME/tmp/$NEWGENE_ASTRID_PREFIX}".trees
+		rm -f $GENE_DIR"/"$NEWGENE_TREES_FILENAME
+		for i in $(seq $GENE_BEGIN $GENE_END)
+		do
+			cat $GENE_DIR"/"$i"/"$WQMC_FILENAME >> $GENE_DIR"/"$NEWGENE_TREES_FILENAME
+		done
+	else
+		NEWGENE_TREES_PREFIX="pv_"$IDENTIFIER
+		NEWGENE_TREES_FILENAME="${TMP_DIRNAME/tmp/$NEWGENE_TREES_PREFIX}".trees
+		rm -f $NEWGENE_TREES_FILENAME
+		for i in $(seq $GENE_BEGIN $GENE_END)
+		do
+			cat $GENE_DIR"/"$i"/"$PV_FILENAME >> $NEWGENE_TREES_FILENAME
+		done
+	fi
+	NEWGENE_ASTRID_PREFIX="astrid_"$IDENTIFIER
+	NEWGENE_ASTRID_FILENAME="${TMP_DIRNAME/tmp/$NEWGENE_ASTRID_PREFIX}".tree
+	$ASTRID_BIN -i $GENE_DIR"/"$NEWGENE_TREES_FILENAME -o $GENE_DIR"/"$NEWGENE_ASTRID_FILENAME
+	ASTRALSETX_PREFIX="extrasetX_"$IDENTIFIER
+	ASTRALSETX_FILENAME="${TMP_DIRNAME/tmp/$ASTRALSETX_PREFIX}".trees
+	cat $GENE_DIR"/"$NEWGENE_TREES_FILENAME $GENE_DIR"/"$NEWGENE_ASTRID_FILENAME $SETX_FILE > $GENE_DIR"/"$ASTRALSETX_FILENAME
+	SPECIES_PREFIX="astral_"$IDENTIFIER
+	SPECIES_FILENAME="${TMP_DIRNAME/tmp/$SPECIES_PREFIX}".tree
+	java -jar $ASTRAL_JAR -i $GENE_DIR"/"$NEWGENE_TREES_FILENAME -o $GENE_DIR"/"$SPECIES_FILENAME -e $GENE_DIR"/"$ASTRALSETX_FILENAME
+	echo "Computation Done"
+############################################################################################################################################	
+	RESULT_PREFIX="result_"$IDENTIFIER
+	RESULT_FILENAME="${TMP_DIRNAME/tmp/$RESULT_PREFIX}".txt
+	RESULT_FILE=$GENE_DIR"/"$RESULT_FILENAME
+	rm -f $RESULT_FILE
+	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $TREEFILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+	echo "Original genes vs True genes" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/astrid_G"$NUMGENES".tree" $GENE_DIR"/resulttmp.txt" 
+	echo "Original genes ASTRID" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/astral_G"$NUMGENES".tree" $GENE_DIR"/resulttmp.txt" 
+	echo "Original genes ASTRAL" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	if [ $SUPERTREE_METHOD == "wqmc" ]
+	then
+		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+		echo "Improved genes vs True genes" >> $RESULT_FILE
+		cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	else
+		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $PV_FILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+		echo "Improved genes vs True genes" >> $RESULT_FILE
+		cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	fi
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/"$NEWGENE_ASTRID_FILENAME $GENE_DIR"/resulttmp.txt" 
+	echo "Improved genes ASTRID" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/"$SPECIES_FILENAME $GENE_DIR"/resulttmp.txt" 
+	echo "Improved genes ASTRAL" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 fi

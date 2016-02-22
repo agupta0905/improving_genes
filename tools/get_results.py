@@ -62,12 +62,23 @@ def get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,o
     f=open(ogenedir+'/'+outputfilename,'w')
     f.write(str(res_mean)+','+str(res_median)+'\n')
     f.close()
+def get_results2(reftreepath,otreepath,outfilepath):
+    fn_rate=get_fnrate(reftreepath, otreepath)
+    f=open(outfilepath,'w')
+    f.write(str(fn_rate)+'\n')
+    f.close()
 if __name__ == "__main__":
-    rgenedir=sys.argv[1]
-    reftreefilename=sys.argv[2]
-    ogenedir=sys.argv[3]
-    outputtreefilename=sys.argv[4]
-    numgenes=int(sys.argv[5])
-    outputfilename=sys.argv[6]
-    get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,outputfilename)    
+    if(len(sys.argv)==4):
+        reftreepath=sys.argv[1]
+        otreepath=sys.argv[2]
+        outfilepath=sys.argv[3]
+        get_results2(reftreepath,otreepath,outfilepath)
+    else:
+        rgenedir=sys.argv[1]
+        reftreefilename=sys.argv[2]
+        ogenedir=sys.argv[3]
+        outputtreefilename=sys.argv[4]
+        numgenes=int(sys.argv[5])
+        outputfilename=sys.argv[6]
+        get_results(rgenedir, reftreefilename,ogenedir,outputtreefilename,numgenes,outputfilename)    
     
