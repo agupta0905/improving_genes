@@ -161,10 +161,10 @@ else
 	RESULT_FILENAME="${TMP_DIRNAME/tmp/$RESULT_PREFIX}".txt
 	RESULT_FILE=$GENE_DIR"/"$RESULT_FILENAME
 	rm -f $RESULT_FILE
-	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $TREEFILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+	python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $TREEFILENAME $NUMGENES resulttmp.txt 
 	echo "Original genes vs True genes" >> $RESULT_FILE
 	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
-	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/astrid_G"$NUMGENES".tree" $GENE_DIR"/resulttmp.txt" 
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/astrid_G"$NUMGENES".tree" $GENE_DIR"/resulttmp.txt"
 	echo "Original genes ASTRID" >> $RESULT_FILE
 	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/astral_G"$NUMGENES".tree" $GENE_DIR"/resulttmp.txt" 
@@ -172,11 +172,11 @@ else
 	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 	if [ $SUPERTREE_METHOD == "wqmc" ]
 	then
-		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $WQMC_FILENAME $NUMGENES resulttmp.txt
 		echo "Improved genes vs True genes" >> $RESULT_FILE
 		cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 	else
-		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $PV_FILENAME $NUMGENES $GENE_DIR"/resulttmp.txt" 
+		python $RES_SRC_FILE $TRUE_GENEDIR $TRUETREEFILENAME $GENE_DIR $PV_FILENAME $NUMGENES resulttmp.txt 
 		echo "Improved genes vs True genes" >> $RESULT_FILE
 		cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 	fi
