@@ -157,7 +157,13 @@ else
 	java -jar $ASTRAL_JAR -i $GENE_DIR"/"$NEWGENE_TREES_FILENAME -o $GENE_DIR"/"$SPECIES_FILENAME -e $GENE_DIR"/"$ASTRALSETX_FILENAME
 	echo "Computation Done"
 ############################################################################################################################################	
-	RESULT_PREFIX="result_"$IDENTIFIER
+	if [ $SUPERTREE_METHOD == "wqmc" ]
+	then
+		RESULT_PREFIX="wqmcresult_"$IDENTIFIER
+	else
+		RESULT_PREFIX="pvresult_"$IDENTIFIER
+	fi
+	
 	RESULT_FILENAME="${TMP_DIRNAME/tmp/$RESULT_PREFIX}".txt
 	RESULT_FILE=$GENE_DIR"/"$RESULT_FILENAME
 	rm -f $RESULT_FILE
