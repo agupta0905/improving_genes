@@ -152,7 +152,10 @@ else
 	cat $GENE_DIR"/"$NEWGENE_TREES_FILENAME $GENE_DIR"/"$NEWGENE_ASTRID_FILENAME $SETX_FILE > $GENE_DIR"/"$ASTRALSETX_FILENAME
 	SPECIES_PREFIX="astral_"$IDENTIFIER
 	SPECIES_FILENAME="${TMP_DIRNAME/tmp/$SPECIES_PREFIX}".tree
+	OSPECIES_PREFIX="origastral_"$IDENTIFIER
+	OSPECIES_FILENAME="${TMP_DIRNAME/tmp/$OSPECIES_PREFIX}".tree
 	java -jar $ASTRAL_JAR -i $GENE_DIR"/"$NEWGENE_TREES_FILENAME -o $GENE_DIR"/"$SPECIES_FILENAME -e $GENE_DIR"/"$ASTRALSETX_FILENAME
+	java -jar $ASTRAL_JAR -i $ORIG_GENES_FILE -o $GENE_DIR"/"$OSPECIES_FILENAME -e $GENE_DIR"/"$ASTRALSETX_FILENAME
 	echo "Computation Done"
 ############################################################################################################################################	
 	if [ $SUPERTREE_METHOD == "wqmc" ]
@@ -189,5 +192,8 @@ else
 	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/"$SPECIES_FILENAME $GENE_DIR"/resulttmp.txt" 
 	echo "Improved genes ASTRAL" >> $RESULT_FILE
+	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
+	python $RES_SRC_FILE $TRUESPECIESTREEPATH $GENE_DIR"/"$OSPECIES_FILENAME $GENE_DIR"/resulttmp.txt" 
+	echo "Original genes ASTRAL (Same set X)" >> $RESULT_FILE
 	cat $GENE_DIR"/resulttmp.txt" >> $RESULT_FILE
 fi
