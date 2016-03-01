@@ -29,11 +29,24 @@ def relabeler_trees(genedir,treefilename,t_dict_path,g):
     for i in range(1+gene_offset,g+1+gene_offset):
         relabel(mapping, genedir+'/'+str(i)+'/'+treefilename)
         print i," Relabeled"
+def relabeler_trees2(t_dict_path,tpath):
+    mapping={}
+    f=open(t_dict_path,'r')
+    for line in f:
+        key=line.split(' ',1)[0]
+        value=line.split(' ',1)[1].replace('\n','')
+        mapping[key]=value
+    f.close()
+    relabel(mapping,tpath)
 
 if __name__ == "__main__":
-    genedir=sys.argv[1]
-    treefilename=sys.argv[2]
-    taxa_dict_path=sys.argv[3]
-    numgenes=int(sys.argv[4])
-    relabeler_trees(genedir, treefilename,taxa_dict_path,numgenes)    
-    
+    if len(sys.argv) == 3:
+        tpath=sys.argv[1]
+        taxa_dict=sys.argv[2]
+        relabeler_trees2(taxa_dict, tpath)
+    else:
+        genedir=sys.argv[1]
+        treefilename=sys.argv[2]
+        taxa_dict_path=sys.argv[3]
+        numgenes=int(sys.argv[4])
+        relabeler_trees(genedir, treefilename,taxa_dict_path,numgenes)
