@@ -10,10 +10,10 @@ def relabel_alignment(inputfilepath,taxa_dictpath):
         mapping[key]=value
     f.close()     
     tns=dendropy.TaxonNamespace()
-    d1 = dendropy.DnaCharacterMatrix.get(path=inputfilepath, schema="phylip", taxon_namespace=tns)
+    d1 = dendropy.DnaCharacterMatrix.get(path=inputfilepath, schema="fasta", taxon_namespace=tns)
     for t in tns:
         t.label=mapping[t.label]
-    outfilepath=inputfilepath.rsplit('.',1)[0]+'_relabeled.'+inputfilepath.rsplit('.',1)[1]
+    outfilepath=inputfilepath.rsplit('.',1)[0]+'_relabeled.phylip'
     d1.write(path=outfilepath,schema='phylip')
 if __name__ == "__main__":  
     inputfilepath=sys.argv[1]
