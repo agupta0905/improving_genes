@@ -1,5 +1,5 @@
 #!/bin/bash
-RAXML_BIN=~/phylogenetics/RaXML-8.2.7/raxmlHPC-PTHREADS-SSE3
+RAXML_BIN=~/phylogenetics/RaXML-8.2.7/raxmlHPC-SSE3
 if [ $# -lt 2 ]
 then
 	echo "Usage run_RAXML.sh bin_dir replicatenumber"
@@ -10,12 +10,16 @@ else
 	do
 		BIN_NUMBER=$(echo $x | cut -f2 -d. )
 		BIN_IDX="bin."$BIN_NUMBER
+		OUTPUT_PREFIX="R"$REP"_supergene_"$BIN_IDX".tree"
 		LOGDIR=$BIN_DIR"/RAXML_log_"$BIN_IDX
-		mkdir -p $LOGDIR
+		rm -rf $LOGDIR
+		mkdir $LOGDIR
+		rm -f "R"$REP"_copy_supergene_"$BIN_IDX".phylip"
+		rm -f "R"$REP"_copy_partition_"$BIN_IDX".txt"
+		rm -f RAxML*$OUTPUT_PREFIX*
 		cp $BIN_DIR"/supergene_"$BIN_IDX".phylip" "R"$REP"_copy_supergene_"$BIN_IDX".phylip"
 		cp $BIN_DIR"/partition_"$BIN_IDX".txt" "R"$REP"_copy_partition_"$BIN_IDX".txt"
-		OUTPUT_PREFIX="R"$REP"_supergene_"$BIN_IDX".tree"
-		$RAXML_BIN -m GTRGAMMA -s "R"$REP"_copy_supergene_"$BIN_IDX".phylip" -n $OUTPUT_PREFIX -N 20 -M -q "R"$REP"_copy_partition_"$BIN_IDX".txt" -p 12345 -T 5 > "RAxML_stdouterr_"$OUTPUT_PREFIX".txt"
+		$RAXML_BIN -m GTRGAMMA -s "R"$REP"_copy_supergene_"$BIN_IDX".phylip" -n $OUTPUT_PREFIX -N 20 -M -q "R"$REP"_copy_partition_"$BIN_IDX".txt" -p 12345 > "RAxML_stdouterr_"$OUTPUT_PREFIX".txt"
 		rm "R"$REP"_copy_supergene_"$BIN_IDX".phylip"
 		rm "R"$REP"_copy_partition_"$BIN_IDX".txt"
 		mv RAxML*$OUTPUT_PREFIX* $LOGDIR/
