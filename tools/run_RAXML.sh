@@ -15,10 +15,10 @@ else
 		cp $BIN_DIR"/supergene_"$BIN_IDX".phylip" "R"$REP"_copy_supergene_"$BIN_IDX".phylip"
 		cp $BIN_DIR"/partition_"$BIN_IDX".txt" "R"$REP"_copy_partition_"$BIN_IDX".txt"
 		OUTPUT_PREFIX="R"$REP"_supergene_"$BIN_IDX".tree"
-		$RAXML_BIN -m GTRGAMMA -s "R"$REP"_copy_supergene_"$BIN_IDX".phylip" -n $OUTPUT_PREFIX -N 20 -M -q "R"$REP_"copy_partition_"$BIN_IDX".txt" -p 12345 -T 5 > "RAxML_stdouterr_"$OUTPUT_PREFIX".txt"
+		$RAXML_BIN -m GTRGAMMA -s "R"$REP"_copy_supergene_"$BIN_IDX".phylip" -n $OUTPUT_PREFIX -N 20 -M -q "R"$REP"_copy_partition_"$BIN_IDX".txt" -p 12345 -T 5 > "RAxML_stdouterr_"$OUTPUT_PREFIX".txt"
 		rm "R"$REP"_copy_supergene_"$BIN_IDX".phylip"
 		rm "R"$REP"_copy_partition_"$BIN_IDX".txt"
-		mv RAxML*$OUTOUT_PREFIX* $LOGDIR/
+		mv RAxML*$OUTPUT_PREFIX* $LOGDIR/
 		cp $LOGDIR"/RAxML_bestTree."$OUTPUT_PREFIX $BIN_DIR/
 		echo $REP $BIN_IDX "Done"
 	done
