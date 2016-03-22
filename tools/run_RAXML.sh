@@ -7,7 +7,7 @@ else
 	OLD_DIR=`pwd`
 	BIN_DIR=$1
 	cd $BIN_DIR
-	for x in `ls bin.0.txt`
+	for x in `ls bin.*.txt`
 	do
 		BIN_NUMBER=$(echo $x | cut -f2 -d. )
 		BIN_IDX="bin."$BIN_NUMBER
