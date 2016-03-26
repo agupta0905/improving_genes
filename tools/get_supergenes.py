@@ -10,7 +10,7 @@ def get_alignment_dict(alignmentfilepath,numtaxa,numsites):
     for line in f:
         line=line.strip()
         if line:
-            pair=line.split('\t',1)
+            pair=line.split(' ',1)
             if(len(pair[1])!=numsites):
                 print "Error numsites dont match"
                 print "Found",len(pair[1]),"Expected",numsites
