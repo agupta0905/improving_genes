@@ -13,7 +13,7 @@ else
 		BIN_IDX="bin."$BIN_NUMBER
 		for g in `cat $BIN_DIR"/"$BIN_IDX".txt"`
 		do
-			cp $BIN_DIR"/"$SUPERTREE_PREFIX"_"$BIN_IDX".tree" $GENE_DIR"/"$g"/"$OUTPUTTREENAME
+			cp $BIN_DIR"/"$SUPERTREE_PREFIX"_"$BIN_IDX".fasta.tree" $GENE_DIR"/"$g"/"$OUTPUTTREENAME
 		done
 		echo $BIN_IDX "Done"
 	done
